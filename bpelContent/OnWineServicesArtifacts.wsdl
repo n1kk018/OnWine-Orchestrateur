@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://orchestrateur.onwine.atod.afcepf.fr" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:wsdl="http://service.al28.afcepf.fr/" xmlns:wsdl1="http://soap.currency.ws.atod.afcepf.fr/" xmlns:wsdl2="http://tax.afcepf.fr" xmlns:wsdl3="http://delivery.afcepf.fr" name="OnWineServices" targetNamespace="http://orchestrateur.onwine.atod.afcepf.fr">
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     TYPE DEFINITION - List of services participating in this BPEL process 
+     The default output of the BPEL designer uses strings as input and 
+     output to the BPEL Process. But you can define or import any XML 
+     Schema type and us them as part of the message types.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    <plnk:partnerLinkType name="calculateurPLType">
+    <plnk:role name="serviceAdditionProvider" portType="wsdl:ICalculateur"/>
+  </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="currencyPLType">
+    <plnk:role name="serviceConvertProvider" portType="wsdl1:ICurrencyConverter"/>
+  </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="taxPLType">
+    <plnk:role name="serviceTaxProvider" portType="wsdl2:ServiceTax"/>
+  </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="deliveryPLType">
+    <plnk:role name="serviceDeliveryFeesProvider" portType="wsdl3:IDeliveryCalculator"/>
+  </plnk:partnerLinkType>
+    <import location="file:/home/nikko/dev/Afcepf/OnWine-Orchestrateur2/bpelContent/calculateur.wsdl" namespace="http://service.al28.afcepf.fr/"/>
+    <import location="file:/home/nikko/dev/Afcepf/OnWine-Orchestrateur2/bpelContent/CurrencyConverter.wsdl" namespace="http://soap.currency.ws.atod.afcepf.fr/"/>
+    <import location="file:/home/nikko/dev/Afcepf/OnWine-Orchestrateur2/bpelContent/ServiceTaxBean.wsdl" namespace="http://tax.afcepf.fr"/>
+    <import location="file:/home/nikko/dev/Afcepf/OnWine-Orchestrateur2/bpelContent/DeliveryCalculator.wsdl" namespace="http://delivery.afcepf.fr"/>
+    <types>  
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://orchestrateur.onwine.atod.afcepf.fr">
+                
+            <element name="OnWineServicesRequest">
+                <complexType>
+                    <sequence>
+                        <element name="amount" type="double"/>
+                        <element name="quantity" type="integer" />
+                        <element name="countryCodeShipping" type="string" />
+                        <element name="countryCodeBilling" type="string" />
+                        <element name="srcCurrency" type="string" />
+                        <element name="trgtCurrency" type="string" />
+                    </sequence>
+                </complexType>
+            </element>
+                  
+            <element name="OnWineServicesResponse">
+                <complexType>
+                    <sequence>
+                        <element name="result" type="string"/>
+                    </sequence>
+                </complexType>
+            </element>
+            
+        </schema>
+    </types>
+  
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     MESSAGE TYPE DEFINITION - Definition of the message types used as 
+     part of the port type defintions
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    <message name="OnWineServicesRequestMessage">
+        <part element="tns:OnWineServicesRequest" name="payload"/>
+    </message>
+    
+    <message name="OnWineServicesResponseMessage">
+        <part element="tns:OnWineServicesResponse" name="payload"/>
+    </message>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     PORT TYPE DEFINITION - A port type groups a set of operations into
+     a logical service unit.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- portType implemented by the OnWineServices BPEL process -->
+    <portType name="OnWineServices">
+        <operation name="process">
+            <input message="tns:OnWineServicesRequestMessage"/>
+            <output message="tns:OnWineServicesResponseMessage"/>
+        </operation>
+    </portType>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     PARTNER LINK TYPE DEFINITION
+         the OnWineServices partnerLinkType binds the provider and
+         requester portType into an asynchronous conversation.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    <plnk:partnerLinkType name="OnWineServices">
+        <plnk:role name="OnWineServicesProvider" portType="tns:OnWineServices"/>
+    </plnk:partnerLinkType>   
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     BINDING DEFINITION - Defines the message format and protocol details
+     for a web service.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <binding name="OnWineServicesBinding" type="tns:OnWineServices">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="process">
+            <soap:operation soapAction="http://orchestrateur.onwine.atod.afcepf.fr/process"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     SERVICE DEFINITION - A service groups a set of ports into
+     a service unit.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <service name="OnWineServicesService">
+        <port binding="tns:OnWineServicesBinding" name="OnWineServicesPort">
+    		<soap:address location="http://localhost:8090/ode/processes/OnWineServices"/>
+        </port>
+    </service>
+</definitions>
