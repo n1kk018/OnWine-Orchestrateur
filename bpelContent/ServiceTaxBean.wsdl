@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://tax.afcepf.fr" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="ServiceTaxBeanService" targetNamespace="http://tax.afcepf.fr">
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://tax.afcepf.fr" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="ServiceTaxBeanService" targetNamespace="http://tax.afcepf.fr">
   <wsdl:types>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://tax.afcepf.fr" xmlns:ns1="http://dto.biz.tax.ws.al28.afcepf.fr" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://tax.afcepf.fr">
   <xs:import namespace="http://dto.biz.tax.ws.al28.afcepf.fr"/>
@@ -163,7 +162,7 @@
   </wsdl:binding>
   <wsdl:service name="ServiceTaxBeanService">
     <wsdl:port binding="tns:ServiceTaxBeanServiceSoapBinding" name="ServiceTaxBeanPort">
-      <soap:address location="http://localhost:8280/OnWine-TaxWS-Biz/ServiceTaxBean"/>
+      <soap:address location="http://GAIA:8180/OnWine-TaxWS-Biz/ServiceTaxBean"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

@@ -33,6 +33,7 @@
                         <element name="quantity" type="integer" />
                         <element name="countryCodeShipping" type="string" />
                         <element name="countryCodeBilling" type="string" />
+                        <element name="transporterName" type="string" />
                         <element name="srcCurrency" type="string" />
                         <element name="trgtCurrency" type="string" />
                     </sequence>

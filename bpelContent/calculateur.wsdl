@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://service.al28.afcepf.fr/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="CalculateurImplService" targetNamespace="http://service.al28.afcepf.fr/">
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://service.al28.afcepf.fr/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="CalculateurImplService" targetNamespace="http://service.al28.afcepf.fr/">
   <wsdl:types>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://service.al28.afcepf.fr/" elementFormDefault="unqualified" targetNamespace="http://service.al28.afcepf.fr/" version="1.0">
 
@@ -92,7 +91,7 @@
   </wsdl:binding>
   <wsdl:service name="CalculateurImplService">
     <wsdl:port binding="tns:CalculateurImplServiceSoapBinding" name="CalculateurImplPort">
-      <soap:address location="http://localhost:8080/springCxfWeb/services/calculateur"/>
+      <soap:address location="http://192.168.102.42:8080/springCxfWeb/services/calculateur"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

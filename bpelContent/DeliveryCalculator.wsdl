@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://delivery.afcepf.fr" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="DeliveryCalculatorService" targetNamespace="http://delivery.afcepf.fr">
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://delivery.afcepf.fr" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="DeliveryCalculatorService" targetNamespace="http://delivery.afcepf.fr">
   <wsdl:types>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://delivery.afcepf.fr" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://delivery.afcepf.fr">
   <xs:element name="getAllDeliveries" type="tns:getAllDeliveries"/>
   <xs:element name="getAllDeliveriesResponse" type="tns:getAllDeliveriesResponse"/>
+  <xs:element name="getInternationalRateDelivery" type="tns:getInternationalRateDelivery"/>
+  <xs:element name="getInternationalRateDeliveryResponse" type="tns:getInternationalRateDeliveryResponse"/>
   <xs:element name="getRateDeliveryTotal" type="tns:getRateDeliveryTotal"/>
   <xs:element name="getRateDeliveryTotalResponse" type="tns:getRateDeliveryTotalResponse"/>
   <xs:complexType name="getAllDeliveries">
@@ -21,20 +22,27 @@
       <xs:element minOccurs="0" name="name" type="xs:string"/>
       <xs:element minOccurs="0" name="quantity" type="xs:int"/>
       <xs:element minOccurs="0" name="rate" type="xs:double"/>
+      <xs:element minOccurs="0" name="rateInternational" type="xs:double"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="getRateDeliveryTotal">
     <xs:sequence>
-      <xs:element minOccurs="0" name="arg0" type="tns:deliveryQuantity"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="deliveryQuantity">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="quantity" type="xs:int"/>
-      <xs:element minOccurs="0" name="srcCountryName" type="xs:string"/>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+      <xs:element minOccurs="0" name="arg1" type="xs:int"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="getRateDeliveryTotalResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getInternationalRateDelivery">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+      <xs:element minOccurs="0" name="arg1" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getInternationalRateDeliveryResponse">
     <xs:sequence>
       <xs:element minOccurs="0" name="return" type="xs:double"/>
     </xs:sequence>
@@ -73,8 +81,16 @@
     <wsdl:part element="tns:getAllDeliveries" name="parameters">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="getInternationalRateDeliveryResponse">
+    <wsdl:part element="tns:getInternationalRateDeliveryResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="getRateDeliveryTotal">
     <wsdl:part element="tns:getRateDeliveryTotal" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getInternationalRateDelivery">
+    <wsdl:part element="tns:getInternationalRateDelivery" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:portType name="IDeliveryCalculator">
@@ -90,6 +106,14 @@
       <wsdl:input message="tns:getRateDeliveryTotal" name="getRateDeliveryTotal">
     </wsdl:input>
       <wsdl:output message="tns:getRateDeliveryTotalResponse" name="getRateDeliveryTotalResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeliveriesWSException" name="DeliveriesWSException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getInternationalRateDelivery">
+      <wsdl:input message="tns:getInternationalRateDelivery" name="getInternationalRateDelivery">
+    </wsdl:input>
+      <wsdl:output message="tns:getInternationalRateDeliveryResponse" name="getInternationalRateDeliveryResponse">
     </wsdl:output>
       <wsdl:fault message="tns:DeliveriesWSException" name="DeliveriesWSException">
     </wsdl:fault>
@@ -121,10 +145,22 @@
         <soap:fault name="DeliveriesWSException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
+    <wsdl:operation name="getInternationalRateDelivery">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getInternationalRateDelivery">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getInternationalRateDeliveryResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeliveriesWSException">
+        <soap:fault name="DeliveriesWSException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="DeliveryCalculatorService">
     <wsdl:port binding="tns:DeliveryCalculatorServiceSoapBinding" name="DeliveryCalculatorPort">
-      <soap:address location="http://localhost:8180/OnWine-DeliveryWS-Biz/DeliveryCalculator"/>
+      <soap:address location="http://GAIA:8180/OnWine-DeliveryWS-Biz/DeliveryCalculator"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
